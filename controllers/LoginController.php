@@ -18,7 +18,7 @@ class LoginController
         ]);
     }
 
-    public static function logout()
+    public static function logout(Router $router)
     {
         echo 'Desde logout';
     }
@@ -35,23 +35,31 @@ class LoginController
         ]);
     }
 
-    public static function olvide()
+    public static function olvide(Router $router)
     {
-        echo 'Desde olvide';
 
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         }
+
+        // Render a la vista
+        $router->render('auth/olvide', [
+            'titulo' => 'Olvide mi Password'
+        ]);
     }
 
-    public static function restablecer()
+    public static function restablecer(Router $router)
     {
-        echo 'Desde restablecer';
 
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         }
+
+        // Render a la vista
+        $router->render('auth/restablecer', [
+            'titulo' => 'Restablecer Password'
+        ]);
     }
 
-    public static function mensaje()
+    public static function mensaje(Router $router)
     {
         echo 'Desde mensaje';
     }
