@@ -2,6 +2,7 @@
 
 namespace Controllers;
 
+use Classes\Email;
 use Model\Usuario;
 use MVC\Router;
 
@@ -32,7 +33,6 @@ class LoginController
 
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $usuario->sincronizar($_POST);
-
             $alertas = $usuario->validarCuentaNueva();
 
             if (empty($alertas)) {
@@ -51,6 +51,10 @@ class LoginController
 
                     // Crear un nuevo usuario
                     $resultado = $usuario->guardar();
+
+                    // Enviar email de confirmación
+                    $email = new Email($usuario->email, $usuario->nombre, $usuario->token);
+                    $email->enviarConfirmacion();
 
                     if ($resultado) {
                         // Enviar email de confirmación
@@ -103,9 +107,36 @@ class LoginController
 
     public static function confirmar(Router $router)
     {
+        // Leer el token de la URL
+        $token = $_GET['token'];
+        if (!$token) {
+            header('Location: /');
+        }
+
+        // Encontrar el usuario con el token
+        $usuario = Usuario::where('token', $token);
+
+        if (empty($usuario)) {
+            // No se encontró un usuario con el token
+            Usuario::setAlerta('error', 'Token no válido');
+        } else {
+            // confirmar la cuenta
+            $usuario->confirmado = 1;
+            $usuario->token = null;
+            unset($usuario->password2);
+
+            // Guardar en la base de datos
+            $usuario->guardar();
+
+            Usuario::setAlerta('exito', 'Cuenta comprobada correctamente');
+        }
+
+        $alertas = Usuario::getAlertas();
+
         // Render a la vista
         $router->render('auth/confirmar', [
-            'titulo' => 'Confirma tu cuenta'
+            'titulo' => 'Confirma tu cuenta',
+            'alertas' => $alertas
         ]);
     }
 }

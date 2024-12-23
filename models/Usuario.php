@@ -57,6 +57,6 @@ class Usuario extends ActiveRecord
     public function generarToken()
     {
         $this->token = password_hash(uniqid(), PASSWORD_BCRYPT);
-        // $this->token = uniqid();
+        //$this->token = uniqid();
     }
 }

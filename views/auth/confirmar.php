@@ -4,6 +4,7 @@
 
     <div class="contenedor-sm">
         <p class="descripcion-pagina">Todo listo para ingresar a UpTask</p>
+        <?php include_once __DIR__ . '/../templates/alertas.php'; ?>
 
         <div class="acciones">
             <a href="/" class="boton">Iniciar Sesión</a>
