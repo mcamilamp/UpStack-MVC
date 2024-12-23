@@ -1,0 +1,16 @@
+@use "base/variables" as v;
+@use "base/mixins" as m;
+
+.mensaje {
+  margin-top: 10rem;
+
+  .uptask {
+    @include m.textoDegradado(v.$naranja, v.$naranja);
+  }
+
+  .boton {
+    @include m.boton(v.$naranja, v.$blanco);
+    display: block;
+    margin: 0 auto;
+  }
+}
